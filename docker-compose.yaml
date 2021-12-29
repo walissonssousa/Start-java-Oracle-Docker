@@ -1,0 +1,56 @@
+version: '3.5'
+
+volumes:
+  data:
+
+networks:
+  templatesbackend-network:
+    name: templatesbackend-network
+
+services:
+  oracle:
+    container_name: oracle
+    image: store/oracle/database-enterprise:12.2.0.1-slim
+
+    volumes:
+      - data:/ORCL
+    networks:
+      - templatesbackend-network
+    ports:
+      - "1521:1521"
+    healthcheck:
+      test: "exit 0"
+
+  templatesbackend_oracle:
+    container_name: templatesbackend-backend
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+      args:
+        UID: ${UID}
+        GID: ${GID}
+    volumes:
+      - .:/usr/app
+      - $HOME/.m2:/root/.m2
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=${API_DB_URL}
+      - SPRING_DATASOURCE_USERNAME=${API_DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${API_DB_PASSWORD}
+      - SPRING_DATASOURCE_DRIVERCLASSNAME=${API_DB_DRIVERCLASSNAME}
+      - SPRING_LIQUIBASE_DEFAULTSCHEMA=${API_DB_USERNAME}
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_SCHEMA=${API_DB_USERNAME}
+      - SPRING_JPA_DATABASEPLATFORM=org.hibernate.dialect.Oracle12cDialect
+    ports:
+      - "8080:8080"
+    depends_on:
+      - oracle
+    networks:
+      - templatesbackend-network
+    restart: always
+
+
+
+
+
+

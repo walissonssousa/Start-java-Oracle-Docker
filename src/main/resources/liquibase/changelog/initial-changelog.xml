@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1634310996362-3" author="arquitetura (generated)">
+        <createTable tableName="authority">
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_authority"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1634310996362-21" author="arquitetura(generated)">
+        <createTable tableName="usuario">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_usuario"/>
+            </column>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_by" type="VARCHAR(255)"/>
+            <column name="updated_at" type="DATETIME"/>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="PASSWORD" type="VARCHAR(255)"/>
+            <column name="full_name" type="VARCHAR(255)"/>
+            <column name="social_name" type="VARCHAR(255)"/>
+            <column name="picture" type="VARCHAR(255)"/>
+            <column name="phone_number" type="VARCHAR(255)"/>
+            <column name="expire_admin_role" type="DATE"/>
+            <column name="provider" type="VARCHAR(255)"/>
+        </createTable>
+
+    </changeSet>
+    <changeSet id="1634310996362-22" author="arquitetura(generated)">
+        <createTable tableName="usuario_authority">
+            <column name="authority_name" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_usuario_authority"/>
+            </column>
+            <column name="usuario_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_usuario_authority"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1634310996362-23" author="arquitetura (generated)">
+        <createTable tableName="usuario_papel">
+            <column name="usuario_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="papel" type="VARCHAR(50)"/>
+        </createTable>
+
+    </changeSet>
+    <changeSet id="1634337276318-6" author="arquitetura">
+        <loadData
+                file="liquibase/data/user.csv"
+                tableName="usuario"
+                usePreparedStatements="true">
+            <!--            <column name="id" type="numeric"/>-->
+            <column name="expire_admin_role" type="date"/>
+        </loadData>
+    </changeSet>
+    <changeSet id="1634310996362-26" author="arquitetura (generated)">
+        <addUniqueConstraint columnNames="email" constraintName="uc_usuario_email" tableName="usuario"/>
+    </changeSet>
+    <changeSet id="1634310996362-27" author="arquitetura(generated)">
+        <addUniqueConstraint columnNames="username" constraintName="uc_usuario_username" tableName="usuario"/>
+    </changeSet>
+    <changeSet id="1634310996362-43" author="arquitetura (generated)">
+        <addForeignKeyConstraint baseColumnNames="usuario_id" baseTableName="usuario_papel"
+                                 constraintName="fk_usuario_papel_on_user" referencedColumnNames="id"
+                                 referencedTableName="usuario"/>
+    </changeSet>
+    <changeSet id="1634310996362-44" author="arquitetura (generated)">
+        <addForeignKeyConstraint baseColumnNames="authority_name" baseTableName="usuario_authority"
+                                 constraintName="fk_usuaut_on_authority" referencedColumnNames="name"
+                                 referencedTableName="authority"/>
+    </changeSet>
+    <changeSet id="1634310996362-45" author="arquitetura(generated)">
+        <addForeignKeyConstraint baseColumnNames="usuario_id" baseTableName="usuario_authority"
+                                 constraintName="fk_usuaut_on_user" referencedColumnNames="id"
+                                 referencedTableName="usuario"/>
+    </changeSet>
+    <changeSet id="1634337276318-6" author="arquitetura">
+        <loadData
+                file="liquibase/data/user.csv"
+                tableName="usuario"
+                usePreparedStatements="true">
+            <!--            <column name="id" type="numeric"/>-->
+            <column name="expire_admin_role" type="date"/>
+        </loadData>
+    </changeSet>
+    <changeSet id="1634337276318-7" author="arquitetura">
+        <loadData
+                file="liquibase/data/userRoles.csv"
+                tableName="usuario_papel"
+                usePreparedStatements="true">
+            <!--            <column name="usuario_id" type="numeric"/>-->
+        </loadData>
+    </changeSet>
+</databaseChangeLog>
